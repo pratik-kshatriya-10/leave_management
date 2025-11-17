@@ -1,7 +1,6 @@
 package com.pheonix.leavemanagement.controllers.users;
 
 import com.pheonix.leavemanagement.controllers.BaseRestController;
-import com.pheonix.leavemanagement.dtos.DepartmentDto;
 import com.pheonix.leavemanagement.dtos.UserDto;
 import com.pheonix.leavemanagement.services.UserService;
 import com.pheonix.leavemanagement.utils.Constants;

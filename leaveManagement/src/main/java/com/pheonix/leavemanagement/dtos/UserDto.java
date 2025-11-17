@@ -1,5 +1,6 @@
 package com.pheonix.leavemanagement.dtos;
 
+import com.pheonix.leavemanagement.models.User;
 import com.pheonix.leavemanagement.utils.Messages;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -13,19 +14,27 @@ public class UserDto implements Serializable {
     @NotEmpty(message = Messages.REQUIRED_FIRST_NAME)
     @Size(max = 100, message = Messages.FIRST_NAME_MAX_SIZE)
     private String firstName;
+
     @NotEmpty(message = Messages.REQUIRED_LAST_NAME)
     @Size(max = 100, message = Messages.LAST_NAME_MAX_SIZE)
     private String lastName;
+
     private String email;
+
     private String password;
+
     private String username;
+
     @NotEmpty(message = Messages.REQUIRED_COUNTRY_CODE)
     @Size(max = 5, message = Messages.COUNTRY_CODE_MAX_SIZE)
     private String countryCode;
+
     @NotEmpty(message = Messages.REQUIRED_CONTACT_NUMBER)
     @Size(max = 10, message = Messages.CONTACT_NUMBER_MAX_SIZE)
     private String contactNumber;
+
     private String departmentId;
+
     private String designationId;
 
     public String getFirstName() {
@@ -98,5 +107,18 @@ public class UserDto implements Serializable {
 
     public void setDesignationId(String designationId) {
         this.designationId = designationId;
+    }
+
+    public User builduser() {
+        User user = new User();
+        user.setFirstName(this.firstName);
+        user.setLastName(this.lastName);
+        user.setEmail(this.email);
+        user.setUsername(this.username.toLowerCase());
+        user.setCountryCode(this.countryCode);
+        user.setContactNumber(this.contactNumber);
+        user.setDepartmentId(this.departmentId);
+        user.setDesignationId(this.designationId);
+        return user;
     }
 }

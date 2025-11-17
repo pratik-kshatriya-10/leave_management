@@ -2,10 +2,9 @@ package com.pheonix.leavemanagement.services.impls;
 
 import com.pheonix.leavemanagement.daos.UserDao;
 import com.pheonix.leavemanagement.dtos.UserDto;
+import com.pheonix.leavemanagement.models.User;
 import com.pheonix.leavemanagement.services.UserService;
-import com.pheonix.leavemanagement.utils.Constants;
-import com.pheonix.leavemanagement.utils.CustomException;
-import com.pheonix.leavemanagement.utils.Messages;
+import com.pheonix.leavemanagement.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +15,17 @@ public class UserServiceImpl implements UserService {
 
     public int addUser(UserDto dto){
         validateUserDetails(dto);
-        if (!userDao.emailAlreadyExist(dto.getEmail().toLowerCase())){
+        if (userDao.emailAlreadyExist(dto.getEmail().toLowerCase())){
             throw new CustomException(Messages.DUPLICATE_EMAIL);
         }
-        if (!userDao.usernameAlreadyExist(dto.getUsername().toLowerCase())){
+        if (userDao.usernameAlreadyExist(dto.getUsername().toLowerCase())){
             throw new CustomException(Messages.DUPLICATE_USERNAME);
         }
-        return 0;
+        User model = dto.builduser();
+        model.setUserId(UUID.random());
+        model.setPassword(dto.getPassword());
+        model.updateCCUU("1", DateUtils.now());
+        return userDao.addUser(model);
     }
 
     private void validateUserDetails(UserDto dto) {

@@ -4,9 +4,17 @@
 <mapper namespace="com.pheonix.leavemanagement.daos.UserDao">
     <resultMap type="com.pheonix.leavemanagement.models.User"
                id="userMap">
-        <id property="designationId" column="designation_id"/>
-        <result property="designationName" column="designation_name"/>
-        <result property="designationCode" column="designation_code"/>
+        <id property="userId" column="user_id"/>
+        <result property="firstName" column="first_name"/>
+        <result property="lastName" column="last_code"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="contactNumber" column="contact_number"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="designationId" column="designation_id"/>
+        <result property="userStatus" column="user_status"/>
         <result property="deletedAt" column="deleted_at"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
@@ -20,7 +28,7 @@
         FROM
             users
         WHERE
-            email = LOWER(email);
+            LOWER(email) = #{email};
     </select>
 
     <select id="usernameAlreadyExist" parameterType="String" resultType="boolean">
@@ -29,7 +37,26 @@
         FROM
             users
         WHERE
-            username = LOWER(username);
+            LOWER(username) = #{username};
     </select>
+
+    <insert id="addUser" parameterType="com.pheonix.leavemanagement.models.User"
+            keyProperty="userId" keyColumn="user_id">
+        INSERT INTO
+            users
+            (
+                user_id, first_name, last_name, email,
+                password, username, country_code, contact_number,
+                department_id, designation_id, user_status,
+                deleted_at, created_at, updated_at, created_by, updated_by
+            )
+        VALUES
+            (
+                #{userId}, #{firstName}, #{lastName}, #{email},
+                #{password}, #{username}, #{countryCode}, #{contactNumber},
+                #{departmentId}, #{designationId}, #{userStatus},
+                #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
+            )
+    </insert>
 
 </mapper>
