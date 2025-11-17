@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pheonix.leavemanagement.daos.DesignationDao">
+    <resultMap type="com.pheonix.leavemanagement.models.Designation"
+               id="designationMap">
+        <id property="designationId" column="designation_id"/>
+        <result property="designationName" column="designation_name"/>
+        <result property="designationCode" column="designation_code"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <insert id="addDesignation" parameterType="com.pheonix.leavemanagement.models.Designation"
+            keyProperty="designationId" keyColumn="designation_id">
+        INSERT INTO
+            designations
+        (
+            designation_id, designation_name, designation_code,
+            deleted_at, created_at, updated_at, created_by, updated_by
+        )
+        VALUES
+        (
+            #{designationId}, #{designationName}, #{designationCode},
+            #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
+        )
+    </insert>
+
+    <select id="designationCodeExists" parameterType="string" resultType="boolean">
+        SELECT
+            count(designation_id) > 0
+        FROM
+            designations
+        WHERE
+            designation_code = #{designationCode}
+        AND
+            deleted_at = false
+    </select>
+
+    <select id="designationIdExist" parameterType="string" resultType="boolean">
+        SELECT
+            count(designation_id) > 0
+        FROM
+            designations
+        WHERE
+            designation_id = #{designationId}
+        AND
+            deleted_at = false
+    </select>
+
+    <select id="designationCodeExistsOtherThan" parameterType="string" resultType="boolean">
+        SELECT
+            count(designation_id) > 0
+        FROM
+            designations
+        WHERE
+            designation_code = #{designationCode}
+        AND
+            deleted_at = false
+        AND
+            designation_id NOT IN (#{designationId})
+    </select>
+
+    <update id="updateDesignation" parameterType="com.pheonix.leavemanagement.models.Designation">
+        UPDATE
+            designations
+        SET
+            designation_name = #{model.designationName},
+            designation_code = #{model.designationCode},
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy}
+        WHERE
+            designation_id = #{designationId}
+        AND
+            deleted_at = false
+    </update>
+
+    <update id="deleteDesignation" parameterType="com.pheonix.leavemanagement.models.Designation">
+        UPDATE
+            designations
+        SET
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy},
+            deleted_at = #{model.deletedAt}
+        WHERE
+            designation_id = #{designationId}
+        AND
+            deleted_at = false
+    </update>
+
+    <select id="fetchDesignation" resultMap="designationMap">
+        SELECT
+            *
+        FROM
+            designations
+        WHERE
+            designation_id = #{designationId}
+        AND
+            deleted_at = false
+    </select>
+
+
+    <select id="fetchDesignationCount" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM
+            designations
+        WHERE
+            deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+                designation_code LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                designation_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="fetchDesignationList" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultMap="designationMap">
+        SELECT
+            *
+        FROM
+            designations
+        WHERE
+            deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+                designation_code LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                designation_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('designationName')">
+                designation_name
+            </when>
+            <otherwise>
+                designation_code
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="paginationDto.defaultSortType != null and paginationDto.defaultSortType.equalsIgnoreCase('desc')">
+                DESC
+            </when>
+            <otherwise>
+                ASC
+            </otherwise>
+        </choose>
+        LIMIT #{paginationDto.limit}
+        OFFSET #{paginationDto.offset}
+    </select>
+
+</mapper>

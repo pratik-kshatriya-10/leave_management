@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pheonix.leavemanagement.daos.DepartmentDao">
+    <resultMap type="com.pheonix.leavemanagement.models.Department"
+                id="departmentMap">
+        <id property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="departmentCode" column="department_code"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <insert id="addDepartment" parameterType="com.pheonix.leavemanagement.models.Department"
+            keyProperty="departmentId" keyColumn="department_id">
+        INSERT INTO
+            departments
+            (
+                department_id, department_name, department_code,
+                deleted_at, created_at, updated_at, created_by, updated_by
+            )
+        VALUES
+            (
+                #{departmentId}, #{departmentName}, #{departmentCode},
+                #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
+            )
+    </insert>
+
+    <select id="departmentCodeExists" parameterType="string" resultType="boolean">
+        SELECT
+            count(department_id) > 0
+        FROM
+            departments
+        WHERE
+            department_code = #{departmentCode}
+        AND
+            deleted_at = false
+    </select>
+
+    <select id="departmentCodeExistsOtherThan" parameterType="string" resultType="boolean">
+        SELECT
+            count(department_id) > 0
+        FROM
+            departments
+        WHERE
+            department_code = #{departmentCode}
+        AND
+            deleted_at = false
+        AND
+            department_id NOT IN (#{departmentId})
+    </select>
+
+    <select id="departmentIdExist" parameterType="string" resultType="boolean">
+        SELECT
+            count(department_id) > 0
+        FROM
+            departments
+        WHERE
+            department_id = #{departmentId}
+        AND
+            deleted_at = false
+    </select>
+
+    <update id="updateDepartment" parameterType="com.pheonix.leavemanagement.models.Department">
+        UPDATE
+            departments
+        SET
+            department_name = #{model.departmentName},
+            department_code = #{model.departmentCode},
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy}
+        WHERE
+            department_id = #{departmentId}
+        AND
+            deleted_at = false
+    </update>
+
+    <update id="deleteDepartment" parameterType="com.pheonix.leavemanagement.models.Department">
+        UPDATE
+            departments
+        SET
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy},
+            deleted_at = #{model.deletedAt}
+        WHERE
+            department_id = #{departmentId}
+        AND
+            deleted_at = false
+    </update>
+
+    <select id="fetchDepartment" resultMap="departmentMap">
+        SELECT
+            *
+        FROM
+            departments
+        WHERE
+            department_id = #{departmentId}
+        AND
+            deleted_at = false
+    </select>
+
+    <select id="fetchDepartmentCount" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM
+            departments
+        WHERE
+           deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+                department_code LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                department_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="fetchDepartmentList" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultMap="departmentMap">
+        SELECT
+            *
+        FROM
+            departments
+        WHERE
+            deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+                department_code LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                department_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('departmentName')">
+                department_name
+            </when>
+            <otherwise>
+                department_code
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="paginationDto.defaultSortType != null and paginationDto.defaultSortType.equalsIgnoreCase('desc')">
+                DESC
+            </when>
+            <otherwise>
+                ASC
+            </otherwise>
+        </choose>
+        LIMIT #{paginationDto.limit}
+        OFFSET #{paginationDto.offset}
+    </select>
+
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pheonix.leavemanagement.daos.UserDao">
+    <resultMap type="com.pheonix.leavemanagement.models.User"
+               id="userMap">
+        <id property="designationId" column="designation_id"/>
+        <result property="designationName" column="designation_name"/>
+        <result property="designationCode" column="designation_code"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <select id="emailAlreadyExist" parameterType="String" resultType="boolean">
+        SELECT
+            count(user_id) > 0
+        FROM
+            users
+        WHERE
+            email = LOWER(email);
+    </select>
+
+    <select id="usernameAlreadyExist" parameterType="String" resultType="boolean">
+        SELECT
+            count(user_id) > 0
+        FROM
+            users
+        WHERE
+            username = LOWER(username);
+    </select>
+
+</mapper>
