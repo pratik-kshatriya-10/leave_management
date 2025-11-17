@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
         if (!userDao.usernameAlreadyExist(dto.getUsername().toLowerCase())){
             throw new CustomException(Messages.DUPLICATE_USERNAME);
         }
-        return 1;
+        return 0;
     }
 
     private void validateUserDetails(UserDto dto) {
