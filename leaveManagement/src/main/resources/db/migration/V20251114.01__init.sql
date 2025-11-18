@@ -28,12 +28,15 @@ CREATE TABLE designations (
     designation_id VARCHAR(32) NOT NULL,
     designation_name VARCHAR(100) NOT NULL,
     designation_code VARCHAR(100) NOT NULL,
+    department_id VARCHAR(32) NOT NULL,
     deleted_at boolean DEFAULT FALSE,
     created_at bigint NOT NULL,
     updated_at bigint NOT NULL,
     created_by VARCHAR(26) NOT NULL,
     updated_by VARCHAR(26) NOT NULL,
-    CONSTRAINT designations_pk PRIMARY KEY (designation_id)
+    CONSTRAINT designations_pk PRIMARY KEY (designation_id),
+    CONSTRAINT designations_department_id_fk FOREIGN KEY (department_id)
+        REFERENCES departments (department_id)
 );
 CREATE INDEX designations_designation_id_department_code ON designations (designation_id, designation_code);
 

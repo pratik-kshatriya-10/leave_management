@@ -10,6 +10,7 @@ public class Designation extends BaseModel{
     private String designationId;
     private String designationName;
     private String designationCode;
+    private String departmentId;
 
     public String getDesignationId() {
         return designationId;
@@ -33,5 +34,13 @@ public class Designation extends BaseModel{
 
     public void setDesignationCode(String designationCode) {
         this.designationCode = designationCode;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 }
