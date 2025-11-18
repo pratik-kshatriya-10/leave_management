@@ -28,10 +28,8 @@ public class DesignationServiceImpl implements DesignationService {
         if(designationDao.designationCodeExists(designationCode)){
             throw new CustomException(Messages.DUPLICATE_DESIGNATION_CODE);
         }
-        Designation model = new Designation();
+        Designation model = dto.buildDesignation(designationCode);
         model.setDesignationId(UUID.random());
-        model.setDesignationName(dto.getDesignationName());
-        model.setDesignationCode(designationCode);
         model.updateCCUU("1", DateUtils.now());
         return designationDao.addDesignation(model);
     }
@@ -49,9 +47,7 @@ public class DesignationServiceImpl implements DesignationService {
         if(designationDao.designationCodeExistsOtherThan(designationCode, designationId)){
             throw new CustomException(Messages.DUPLICATE_DESIGNATION_CODE);
         }
-        Designation model = new Designation();
-        model.setDesignationName(dto.getDesignationName());
-        model.setDesignationCode(designationCode);
+        Designation model = dto.buildDesignation(designationCode);
         model.updateUU("1", DateUtils.now());
         return designationDao.updateDesignation(model, designationId);
     }

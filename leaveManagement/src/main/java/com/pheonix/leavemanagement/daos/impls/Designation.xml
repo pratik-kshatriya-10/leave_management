@@ -7,6 +7,7 @@
         <id property="designationId" column="designation_id"/>
         <result property="designationName" column="designation_name"/>
         <result property="designationCode" column="designation_code"/>
+        <result property="departmentId" column="department_id"/>
         <result property="deletedAt" column="deleted_at"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
@@ -19,12 +20,12 @@
         INSERT INTO
             designations
         (
-            designation_id, designation_name, designation_code,
+            designation_id, designation_name, designation_code, department_id,
             deleted_at, created_at, updated_at, created_by, updated_by
         )
         VALUES
         (
-            #{designationId}, #{designationName}, #{designationCode},
+            #{designationId}, #{designationName}, #{designationCode}, #{departmentId},
             #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
         )
     </insert>
@@ -70,6 +71,7 @@
         SET
             designation_name = #{model.designationName},
             designation_code = #{model.designationCode},
+            department_id = #{model.departmentId},
             updated_at= #{model.updatedAt},
             updated_by = #{model.updatedBy}
         WHERE
@@ -117,6 +119,8 @@
                 designation_code LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
             OR
                 designation_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                department_id LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
             )
         </if>
     </select>
@@ -135,6 +139,8 @@
                 designation_code LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
             OR
                 designation_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                department_id LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
             )
         </if>
         ORDER BY
