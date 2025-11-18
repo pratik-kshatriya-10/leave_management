@@ -28,7 +28,9 @@
         FROM
             users
         WHERE
-            LOWER(email) = #{email};
+            LOWER(email) = #{email}
+        AND
+            deleted_at = false;
     </select>
 
     <select id="usernameAlreadyExist" parameterType="String" resultType="boolean">
@@ -37,7 +39,9 @@
         FROM
             users
         WHERE
-            LOWER(username) = #{username};
+            LOWER(username) = #{username}
+        AND
+            deleted_at = false;
     </select>
 
     <insert id="addUser" parameterType="com.pheonix.leavemanagement.models.User"
@@ -58,5 +62,164 @@
                 #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
             )
     </insert>
+
+    <update id="updateUser" parameterType="com.pheonix.leavemanagement.models.User">
+        UPDATE
+            users
+        SET
+            first_name = #{model.firstName},
+            last_name = #{model.lastName},
+            email = #{model.email},
+            username = #{model.username},
+            country_code = #{model.countryCode},
+            contact_number = #{model.contactNumber},
+            department_id = #{model.departmentId},
+            designation_id = #{model.designationId},
+            user_status = #{model.userStatus},
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy}
+        WHERE
+            user_id = #{userId}
+        AND
+            deleted_at = false;
+    </update>
+
+    <select id="userIdExist" parameterType="string" resultType="boolean">
+        SELECT
+            count(user_id) > 0
+        FROM
+            users
+        WHERE
+            user_id = #{userId}
+        AND
+            deleted_at = false
+    </select>
+
+    <select id="emailAlreadyExistOtherThan" parameterType="string" resultType="boolean">
+        SELECT
+            count(user_id) > 0
+        FROM
+            users
+        WHERE
+            LOWER(email) = #{email}
+        AND
+            deleted_at = false
+        AND
+            user_id NOT IN (#{userId})
+    </select>
+
+    <select id="usernameAlreadyExistOtherThan" parameterType="string" resultType="boolean">
+        SELECT
+            count(user_id) > 0
+        FROM
+            users
+        WHERE
+            LOWER(username) = #{username}
+        AND
+            deleted_at = false
+        AND
+            user_id NOT IN (#{userId})
+    </select>
+
+    <update id="deleteUser" parameterType="com.pheonix.leavemanagement.models.User">
+        UPDATE
+            users
+        SET
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy},
+            deleted_at = #{model.deletedAt}
+        WHERE
+            user_id = #{userId}
+        AND
+            deleted_at = false;
+    </update>
+
+    <select id="fetchUser" resultMap="userMap">
+        SELECT
+            *
+        FROM
+            users
+        WHERE
+            user_id = #{userId}
+        AND
+            deleted_at = false
+    </select>
+
+    <select id="fetchUserCount" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM
+            users
+        WHERE
+            deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+                first_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                last_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                CONCAT(first_name, ' ', last_name) LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                email LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                username LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                contact_number LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="fetchUserList" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultMap="userMap">
+        SELECT
+            *
+        FROM
+            users
+        WHERE
+            deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+                first_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                last_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                CONCAT(first_name, ' ', last_name) LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                email LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                username LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                contact_number LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('firstName')">
+                first_name
+            </when>
+            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('lastName')">
+                last_name
+            </when>
+            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('email')">
+                email
+            </when>
+            <otherwise>
+                username
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="paginationDto.defaultSortType != null and paginationDto.defaultSortType.equalsIgnoreCase('desc')">
+                DESC
+            </when>
+            <otherwise>
+                ASC
+            </otherwise>
+        </choose>
+        LIMIT #{paginationDto.limit}
+        OFFSET #{paginationDto.offset}
+    </select>
 
 </mapper>

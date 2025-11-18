@@ -9,7 +9,10 @@ public class Constants {
     public static final String BASE_URL = "/api/v1";
     public static final String DEPARTMENT_ID = "departmentId";
     public static final String DESIGNATION_ID = "designationId";
+    public static final String USER_ID = "userId";
     public static final int DEFAULT_LIMIT = 20;
+    public static final String SUCCESS = "Success";
+    public static final String ERROR = "error";
 
     public static class RegexPattern{
         private RegexPattern(){

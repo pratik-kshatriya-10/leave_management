@@ -3,6 +3,7 @@ package com.pheonix.leavemanagement.dtos;
 import com.pheonix.leavemanagement.utils.Constants;
 
 public class PaginationDto {
+
     private int limit;
     private int offset;
     private String searchStr;
