@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
+
     @Autowired
     private DepartmentDao departmentDao;
 
@@ -79,12 +80,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     public int fetchDepartmentCount(PaginationDto paginationDto){
         return departmentDao.fetchDepartmentCount(paginationDto);
     }
+
     @Override
     public List<Department> fetchDepartmentList(PaginationDto paginationDto){
         return departmentDao.fetchDepartmentList(paginationDto);
     }
-
-
 
 }
 

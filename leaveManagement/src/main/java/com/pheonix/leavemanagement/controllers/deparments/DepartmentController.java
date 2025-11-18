@@ -33,7 +33,7 @@ public class DepartmentController extends BaseRestController {
         if (result < 0){
             throw new CustomException(Messages.ERROR_ADD_DEPARTMENT);
         }
-        return constructSuccessResponse(Messages.SUCCESS_ADD_DEPARTMENT, Messages.SUCCESS);
+        return constructSuccessResponse(Messages.SUCCESS_ADD_DEPARTMENT, Constants.SUCCESS);
 
 
     }
@@ -46,17 +46,17 @@ public class DepartmentController extends BaseRestController {
         if (result < 0){
             throw new CustomException(Messages.ERROR_UPDATE_DEPARTMENT);
         }
-        return constructSuccessResponse(Messages.SUCCESS_UPDATE_DEPARTMENT, Messages.SUCCESS);
+        return constructSuccessResponse(Messages.SUCCESS_UPDATE_DEPARTMENT, Constants.SUCCESS);
     }
 
-    @DeleteMapping(value = "/{departmentId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{departmentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> deleteDepartment(
             @PathVariable(Constants.DEPARTMENT_ID) String departmentId){
         int result = departmentService.deleteDepartment(departmentId);
         if (result < 0){
             throw new CustomException(Messages.ERROR_DELETE_DEPARTMENT);
         }
-        return constructSuccessResponse(Messages.SUCCESS_DELETE_DEPARTMENT, Messages.SUCCESS);
+        return constructSuccessResponse(Messages.SUCCESS_DELETE_DEPARTMENT, Constants.SUCCESS);
 
     }
 
@@ -70,7 +70,7 @@ public class DepartmentController extends BaseRestController {
         return result;
     }
 
-    @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public DataGridModel<Department> searchDepartments(
             @RequestBody PaginationDto paginationDto){
         int count = departmentService.fetchDepartmentCount(paginationDto);

@@ -12,7 +12,7 @@ public class DataGridModel<T> implements Serializable {
 
     private transient List<T> data;
     private int count;
-    private PaginationDto paginationDto;
+    private transient PaginationDto paginationDto;
 
     public List<T> getData() {
         return data;

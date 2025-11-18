@@ -79,10 +79,10 @@ public class DesignationServiceImpl implements DesignationService {
     public int fetchDesignationCount(PaginationDto paginationDto){
         return designationDao.fetchDesignationCount(paginationDto);
     }
+
     @Override
     public List<Designation> fetchDesignationList(PaginationDto paginationDto){
         return designationDao.fetchDesignationList(paginationDto);
     }
-
 
 }

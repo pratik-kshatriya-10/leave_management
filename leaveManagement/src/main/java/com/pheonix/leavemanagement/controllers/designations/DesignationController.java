@@ -34,7 +34,7 @@ public class DesignationController extends BaseRestController {
         if (result < 0){
             throw new CustomException(Messages.ERROR_ADD_DESIGNATION);
         }
-        return constructSuccessResponse(Messages.SUCCESS_ADD_DESIGNATION, Messages.SUCCESS);
+        return constructSuccessResponse(Messages.SUCCESS_ADD_DESIGNATION, Constants.SUCCESS);
 
 
     }
@@ -47,17 +47,17 @@ public class DesignationController extends BaseRestController {
         if (result < 0){
             throw new CustomException(Messages.ERROR_UPDATE_DESIGNATION);
         }
-        return constructSuccessResponse(Messages.SUCCESS_UPDATE_DESIGNATION, Messages.SUCCESS);
+        return constructSuccessResponse(Messages.SUCCESS_UPDATE_DESIGNATION, Constants.SUCCESS);
     }
 
-    @DeleteMapping(value = "/{designationId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{designationId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> deleteDesignation(
             @PathVariable(Constants.DESIGNATION_ID) String designationId){
         int result = designationService.deleteDesignation(designationId);
         if (result < 0){
             throw new CustomException(Messages.ERROR_DELETE_DESIGNATION);
         }
-        return constructSuccessResponse(Messages.SUCCESS_DELETE_DESIGNATION, Messages.SUCCESS);
+        return constructSuccessResponse(Messages.SUCCESS_DELETE_DESIGNATION, Constants.SUCCESS);
 
     }
 
@@ -71,7 +71,7 @@ public class DesignationController extends BaseRestController {
         return result;
     }
 
-    @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public DataGridModel<Designation> searchDesignations(
             @RequestBody PaginationDto paginationDto){
         int count = designationService.fetchDesignationCount(paginationDto);

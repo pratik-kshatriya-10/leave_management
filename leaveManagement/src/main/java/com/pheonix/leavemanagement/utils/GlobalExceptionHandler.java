@@ -10,13 +10,15 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final String MESSAGE = "message";
+    private static final String STATUS = "status";
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<?> handleCustomException(CustomException ex) {
 
         Map<String, Object> error = new HashMap<>();
-        error.put("status", "ERROR");
-        error.put("message", ex.getMessage());
+        error.put(STATUS, Constants.ERROR);
+        error.put(MESSAGE, ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

@@ -6,7 +6,6 @@ public class Messages {
     public static final String SUCCESS_ADD_DEPARTMENT = "Department added successfully";
     public static final String DUPLICATE_DEPARTMENT_CODE = "Duplicate department code";
     public static final String INVALID_DEPARTMENT_NAME = "Department name is invalid. Only alphabetical characters allowed";
-    public static final String SUCCESS = "Success";
     public static final String INVALID_DEPARTMENT_ID = "Invalid department id";
     public static final String ERROR_UPDATE_DEPARTMENT = "Department not updated";
     public static final String SUCCESS_UPDATE_DEPARTMENT = "Department updated successfully";
@@ -42,6 +41,12 @@ public class Messages {
     public static final String INVALID_CONTACT_NUMBER = "Invalid contact number. Only digits allowed";
     public static final String DUPLICATE_EMAIL = "Email already exist";
     public static final String DUPLICATE_USERNAME = "Username already exist";
+    public static final String ERROR_UPDATE_USER = "User not updated";
+    public static final String SUCCESS_UPDATE_USER = "User updated successfully";
+    public static final String INVALID_USER_ID = "Invalid user id";
+    public static final String ERROR_DELETE_USER = "User not deleted";
+    public static final String SUCCESS_DELETE_USER = "User deleted successfully";
+    public static final String USER_NOT_FOUND = "User not found";
 
 
     private Messages(){

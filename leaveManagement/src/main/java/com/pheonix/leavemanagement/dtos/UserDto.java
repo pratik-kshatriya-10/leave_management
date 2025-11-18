@@ -119,6 +119,7 @@ public class UserDto implements Serializable {
         user.setContactNumber(this.contactNumber);
         user.setDepartmentId(this.departmentId);
         user.setDesignationId(this.designationId);
+        user.setUserStatus(true);
         return user;
     }
 }
