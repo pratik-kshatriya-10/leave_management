@@ -9,7 +9,7 @@ public class LeaveType extends BaseModel{
 
     private String leaveTypeId;
     private String leaveTypeName;
-    private String leaveTypeCode;
+    private String  leaveTypeCode;
 
     public String getLeaveTypeId() {
         return leaveTypeId;

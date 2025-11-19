@@ -83,7 +83,7 @@ CREATE INDEX leave_types_leave_type_id_leave_type_code ON leave_types (leave_typ
 CREATE TABLE leaves (
     leave_id VARCHAR(32) NOT NULL,
     user_id VARCHAR(26) NOT NULL,
-    leave_type_id VARCHAR(26) NOT NULL,
+    leave_type_name VARCHAR(30) NOT NULL,
     from_date bigint NOT NULL,
     to_date bigint NOT NULL,
     number_of_days int NOT NULL,
@@ -91,17 +91,18 @@ CREATE TABLE leaves (
     reported_to_id VARCHAR(26) NOT NULL,
     leave_status VARCHAR(20) NOT NULL,
     deleted_at boolean DEFAULT FALSE,
-    created_at VARCHAR(26) NOT NULL,
-    updated_at varchar(26) NOT NULL,
-    created_by bigint NOT NULL,
-    updated_by bigint NOT NULL,
+    created_at bigint NOT NULL,
+    updated_at bigint NOT NULL,
+    created_by VARCHAR(26) NOT NULL,
+    updated_by VARCHAR(26) NOT NULL,
     CONSTRAINT leaves_pk PRIMARY KEY (leave_id)
 );
 
 
 CREATE TABLE leave_history (
     leave_history_id VARCHAR(32) NOT NULL,
-    user_id VARCHAR(26) NOT NULL,
+    user_id VARCHAR(32) NOT NULL,
+    leave_id VARCHAR(32) NOT NULL,
     status VARCHAR(20) NOT NULL,
     deleted_at boolean DEFAULT FALSE,
     created_at bigint NOT NULL,

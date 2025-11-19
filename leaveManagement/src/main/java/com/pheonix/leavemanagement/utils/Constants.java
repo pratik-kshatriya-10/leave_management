@@ -10,6 +10,7 @@ public class Constants {
     public static final String DEPARTMENT_ID = "departmentId";
     public static final String DESIGNATION_ID = "designationId";
     public static final String USER_ID = "userId";
+    public static final String LEAVE_ID = "leaveId";
     public static final int DEFAULT_LIMIT = 20;
     public static final String SUCCESS = "Success";
     public static final String ERROR = "error";
@@ -23,5 +24,12 @@ public class Constants {
         public static final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         public static final String NUMBER_PATTERN = "^[0-9]+$";
 
+    }
+    public static class LeaveStatuses{
+        private LeaveStatuses(){
+            // No Use
+        }
+        public static final String PENDING = "pending";
+        public static final String APPROVED = "Approved";
     }
 }

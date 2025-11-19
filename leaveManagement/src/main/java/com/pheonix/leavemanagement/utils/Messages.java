@@ -47,6 +47,15 @@ public class Messages {
     public static final String ERROR_DELETE_USER = "User not deleted";
     public static final String SUCCESS_DELETE_USER = "User deleted successfully";
     public static final String USER_NOT_FOUND = "User not found";
+    public static final String ERROR_ADD_USER = "User not added";
+    public static final String SUCCESS_ADD_USER = "User added successfully";
+    public static final String ERROR_ADD_LEAVE = "Leave not added";
+    public static final String SUCCESS_ADD_LEAVE = "Leave added successfully";
+    public static final String INVALID_LEAVE_ID = "Invalid leave id";
+    public static final String ERROR_UPDATE_LEAVE = "Leave not updated";
+    public static final String SUCCESS_UPDATE_LEAVE = "Leave updated successfully";
+    public static final String ERROR_DELETE_LEAVE = "Leave not deleted";
+    public static final String SUCCESS_DELETE_LEAVE = "Leave deleted successfully";
 
 
     private Messages(){
