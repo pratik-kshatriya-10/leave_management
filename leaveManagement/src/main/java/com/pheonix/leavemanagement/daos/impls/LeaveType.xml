@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pheonix.leavemanagement.daos.LeaveTypeDao">
+    <resultMap id="leaveTypeMap" type="com.pheonix.leavemanagement.models.LeaveType">
+        <id property="leaveTypeId" column="leave_type_id"/>
+        <result property="leaveTypeName" column="leave_type_name"/>
+        <result property="leaveTypeCode" column="leave_type_code"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <select id="fetchLeaveTypes" resultMap="leaveTypeMap">
+        SELECT
+            *
+        FROM
+            leave_types
+    </select>
+</mapper>
