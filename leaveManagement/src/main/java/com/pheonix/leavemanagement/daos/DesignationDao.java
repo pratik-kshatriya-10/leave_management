@@ -2,10 +2,11 @@ package com.pheonix.leavemanagement.daos;
 
 import com.pheonix.leavemanagement.dtos.PaginationDto;
 import com.pheonix.leavemanagement.models.Designation;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface DesignationDao {
     int addDesignation(Designation model);
 
