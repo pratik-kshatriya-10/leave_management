@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pheonix.leavemanagement.daos.LeaveDao">
+    <resultMap type="com.pheonix.leavemanagement.models.Leave"
+               id="leaveMap">
+        <id property="leaveId" column="leave_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="leaveTypeName" column="leave_type_name"/>
+        <result property="fromDate" column="from_date"/>
+        <result property="toDate" column="to_date"/>
+        <result property="numberOfDays" column="number_of_days"/>
+        <result property="leaveReason" column="leave_reason"/>
+        <result property="reportedToId" column="reported_to_id"/>
+        <result property="leaveStatus" column="leave_status"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <insert id="addLeave" parameterType="com.pheonix.leavemanagement.models.Leave"
+            keyProperty="leaveId" keyColumn="leave_id">
+        INSERT INTO
+            leaves
+        (
+            leave_id, user_id, leave_type_name, from_date, to_date,
+            number_of_days, leave_reason, reported_to_id, leave_status,
+            deleted_at, created_at, updated_at, created_by, updated_by
+        )
+        VALUES
+        (
+            #{leaveId}, #{userId}, #{leaveTypeName}, #{fromDate}, #{toDate},
+            #{numberOfDays}, #{leaveReason}, #{reportedToId}, #{leaveStatus},
+            #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
+        )
+    </insert>
+
+    <update id="updateLeave" parameterType="com.pheonix.leavemanagement.models.Leave">
+        UPDATE
+            leaves
+        SET
+            user_id = #{model.userId},
+            leave_type_name = #{model.leaveTypeName},
+            from_date = #{model.fromDate},
+            to_date = #{model.toDate},
+            number_of_days = #{model.numberOfDays},
+            leave_reason = #{model.leaveReason},
+            reported_to_id = #{model.reportedToId},
+            leave_status = #{model.leaveStatus},
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy}
+        WHERE
+            leave_id = #{model.leaveId}
+        AND
+            deleted_at = false;
+    </update>
+
+    <select id="leaveIdExist" parameterType="string" resultType="boolean">
+        SELECT
+            count(leave_id) > 0
+        FROM
+            leaves
+        WHERE
+            leave_id = #{leaveId}
+        AND
+            deleted_at = false;
+    </select>
+
+    <update id="deleteLeave" parameterType="com.pheonix.leavemanagement.models.Leave">
+        UPDATE
+            leaves
+        SET
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy},
+            deleted_at = #{model.deletedAt}
+        WHERE
+            leave_id = #{leaveId}
+        AND
+            deleted_at = false;
+    </update>
+
+    <select id="fetchLeave" resultMap="leaveMap">
+        SELECT
+            *
+        FROM
+            leaves
+        WHERE
+            leave_id = #{leaveId}
+        AND
+            deleted_at = false
+    </select>
+
+    <select id="fetchLeaveCount" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM
+            leaves
+        WHERE
+            deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+                user_id LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="fetchLeaveList" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
+            resultMap="leaveMap">
+        SELECT
+            *
+        FROM
+            leaves
+        WHERE
+        deleted_at = false
+        <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
+            AND
+            (
+            user_id LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('userId')">
+                user_id
+            </when>
+            <otherwise>
+                created_at
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="paginationDto.defaultSortType != null and paginationDto.defaultSortType.equalsIgnoreCase('desc')">
+                DESC
+            </when>
+            <otherwise>
+                ASC
+            </otherwise>
+        </choose>
+        LIMIT #{paginationDto.limit}
+        OFFSET #{paginationDto.offset}
+    </select>
+</mapper>

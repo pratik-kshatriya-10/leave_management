@@ -31,9 +31,9 @@ public class UserController extends BaseRestController {
 
         int result = userService.addUser(dto);
         if (result < 0){
-            throw new CustomException(Messages.ERROR_ADD_DEPARTMENT);
+            throw new CustomException(Messages.ERROR_ADD_USER);
         }
-        return constructSuccessResponse(Messages.SUCCESS_ADD_DEPARTMENT, Constants.SUCCESS);
+        return constructSuccessResponse(Messages.SUCCESS_ADD_USER, Constants.SUCCESS);
     }
 
     @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
