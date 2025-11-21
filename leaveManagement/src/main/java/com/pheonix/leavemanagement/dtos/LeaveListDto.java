@@ -2,12 +2,19 @@ package com.pheonix.leavemanagement.dtos;
 
 public class LeaveListDto {
     private String userId;
+
     private String userFullName;
+
     private String leaveType;
+
     private String fromDate;
+
     private String toDate;
+
     private int numberOfDays;
+
     private String leaveReason;
+
     private String reportedToName;
 
     public String getUserId() {

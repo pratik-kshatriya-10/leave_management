@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class UserDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 339069682243497021L;
+
     @NotEmpty(message = Messages.REQUIRED_FIRST_NAME)
     @Size(max = 100, message = Messages.FIRST_NAME_MAX_SIZE)
     private String firstName;

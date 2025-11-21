@@ -93,6 +93,9 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int updateLeaveStatus(LeaveStatusDto dto){
+        if (!userService.userIdExist(dto.getUserId())){
+            throw new CustomException(Messages.INVALID_USER_ID);
+        }
         if (!Constants.LeaveStatuses.leaveStatuses.contains(dto.getLeaveStatus())){
             throw new CustomException(Messages.INVALID_LEAVE_STATUS);
         }

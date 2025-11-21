@@ -5,9 +5,13 @@ import com.pheonix.leavemanagement.utils.Constants;
 public class PaginationDto {
 
     private int limit;
+
     private int offset;
+
     private String searchStr;
+
     private String defaultSortColumn;
+
     private String defaultSortType;
 
     public int getLimit() {

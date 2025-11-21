@@ -1,8 +1,15 @@
 package com.pheonix.leavemanagement.dtos;
 
+import com.pheonix.leavemanagement.utils.Messages;
+import jakarta.validation.constraints.NotEmpty;
+
 public class LeaveStatusDto {
+    @NotEmpty(message = Messages.LEAVE_ID_REQUIRED)
     private String leaveId;
+
+    @NotEmpty(message = Messages.USER_ID_REQUIRED)
     private String userId;
+
     private String leaveStatus;
 
     public String getLeaveId() {

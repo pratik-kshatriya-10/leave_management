@@ -5,11 +5,17 @@ import com.pheonix.leavemanagement.utils.Constants;
 
 public class LeaveDto {
     private String userId;
+
     private String leaveTypeName;
+
     private String fromDate;
+
     private String toDate;
+
     private int numberOfDays;
+
     private String leaveReason;
+
     private String reportedToId;
 
     public String getUserId() {

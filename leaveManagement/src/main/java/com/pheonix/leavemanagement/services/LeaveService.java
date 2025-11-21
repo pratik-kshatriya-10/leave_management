@@ -5,6 +5,9 @@ import com.pheonix.leavemanagement.dtos.LeaveListDto;
 import com.pheonix.leavemanagement.dtos.LeaveStatusDto;
 import com.pheonix.leavemanagement.dtos.PaginationDto;
 import com.pheonix.leavemanagement.models.Leave;
+import com.pheonix.leavemanagement.utils.Messages;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -12,19 +15,20 @@ import java.util.List;
 @Service
 @Validated
 public interface LeaveService {
-    int addLeave(LeaveDto dto);
+    int addLeave(@Valid LeaveDto dto);
 
-    int updateLeave(LeaveDto dto, String leaveId);
+    int updateLeave(@Valid LeaveDto dto,
+                    @NotEmpty(message = Messages.LEAVE_ID_REQUIRED) String leaveId);
 
-    boolean leaveIdExist(String leaveId);
+    boolean leaveIdExist(@NotEmpty(message = Messages.LEAVE_ID_REQUIRED) String leaveId);
 
-    int deleteLeave(String leaveId);
+    int deleteLeave(@NotEmpty(message = Messages.LEAVE_ID_REQUIRED) String leaveId);
 
-    Leave fetchLeave(String leaveId);
+    Leave fetchLeave(@NotEmpty(message = Messages.LEAVE_ID_REQUIRED) String leaveId);
 
-    int fetchLeaveCount(PaginationDto paginationDto);
+    int fetchLeaveCount(@Valid PaginationDto paginationDto);
 
-    List<LeaveListDto> fetchLeaveList(PaginationDto paginationDto);
+    List<LeaveListDto> fetchLeaveList(@Valid PaginationDto paginationDto);
 
-    int updateLeaveStatus(LeaveStatusDto dto);
+    int updateLeaveStatus(@Valid LeaveStatusDto dto);
 }
