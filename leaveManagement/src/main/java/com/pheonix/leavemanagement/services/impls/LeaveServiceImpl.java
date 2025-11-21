@@ -3,8 +3,10 @@ package com.pheonix.leavemanagement.services.impls;
 import com.pheonix.leavemanagement.daos.LeaveDao;
 import com.pheonix.leavemanagement.dtos.LeaveDto;
 import com.pheonix.leavemanagement.dtos.LeaveListDto;
+import com.pheonix.leavemanagement.dtos.LeaveStatusDto;
 import com.pheonix.leavemanagement.dtos.PaginationDto;
 import com.pheonix.leavemanagement.models.Leave;
+import com.pheonix.leavemanagement.services.LeaveHistoryService;
 import com.pheonix.leavemanagement.services.LeaveService;
 import com.pheonix.leavemanagement.services.UserService;
 import com.pheonix.leavemanagement.utils.*;
@@ -20,18 +22,25 @@ public class LeaveServiceImpl implements LeaveService {
     private LeaveDao leaveDao;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LeaveHistoryService leaveHistoryService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int addLeave(LeaveDto dto){
         validateLeaveDetails(dto);
         Leave model = dto.buildLeave();
-        model.setLeaveId(UUID.random());
+        String leaveId = UUID.random();
+        model.setLeaveId(leaveId);
         model.setFromDate(DateUtils.convertDateIntoLongStartOfDay(dto.getFromDate()));
         model.setToDate(DateUtils.convertDateIntoLongEndOfDay(dto.getToDate()));
         model.setLeaveStatus(Constants.LeaveStatuses.PENDING);
         model.updateCCUU("1", DateUtils.now());
-        return leaveDao.addLeave(model);
+        int result = leaveDao.addLeave(model);
+        if (result > 0){
+            leaveHistoryService.addLeaveHistory(leaveId, dto.getUserId(), Constants.LeaveStatuses.PENDING, "1");
+        }
+        return result;
     }
 
     private void validateLeaveDetails(LeaveDto dto) {
@@ -81,6 +90,22 @@ public class LeaveServiceImpl implements LeaveService {
         return leaveDao.fetchLeaveList(paginationDto);
     }
 
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public int updateLeaveStatus(LeaveStatusDto dto){
+        if (!Constants.LeaveStatuses.leaveStatuses.contains(dto.getLeaveStatus())){
+            throw new CustomException(Messages.INVALID_LEAVE_STATUS);
+        }
+        Leave model = new Leave();
+        model.setLeaveStatus(dto.getLeaveStatus());
+        model.setUserId(dto.getUserId());
+        model.updateUU("1", DateUtils.now());
+        int result = leaveDao.updateLeaveStatus(model, dto.getLeaveId());
+        if (result > 0){
+            leaveHistoryService.addLeaveHistory(dto.getLeaveId(), dto.getUserId(), dto.getLeaveStatus(), "1");
+        }
+        return result;
+    }
 
 
 }

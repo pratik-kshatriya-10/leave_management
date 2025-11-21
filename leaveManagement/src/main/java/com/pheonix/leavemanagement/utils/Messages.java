@@ -56,6 +56,13 @@ public class Messages {
     public static final String SUCCESS_UPDATE_LEAVE = "Leave updated successfully";
     public static final String ERROR_DELETE_LEAVE = "Leave not deleted";
     public static final String SUCCESS_DELETE_LEAVE = "Leave deleted successfully";
+    public static final String ERROR_UPDATE_LEAVE_STATUS = "Leave status is not updated";
+    public static final String SUCCESS_UPDATE_LEAVE_STATUS = "Leave status updated successfully";
+    public static final String INVALID_LEAVE_STATUS = "Invalid leave status. Only Pending, Approved, and Cancelled statuses are allowed";
+    public static final String LEAVE_ID_REQUIRED = "Leave id is required";
+    public static final String USER_ID_REQUIRED = "User id is required";
+    public static final String LEAVE_STATUS_REQUIRED = "Leave status is required";
+    public static final String LOGGED_IN_USER_ID_REQUIRED = "Logged in user id is required";
 
 
     private Messages(){

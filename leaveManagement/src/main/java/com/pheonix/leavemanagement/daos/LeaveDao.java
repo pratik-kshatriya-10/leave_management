@@ -26,4 +26,7 @@ public interface LeaveDao {
     int fetchLeaveCount(@Param("paginationDto") PaginationDto paginationDto);
 
     List<LeaveListDto> fetchLeaveList(@Param("paginationDto") PaginationDto paginationDto);
+
+    int updateLeaveStatus(@Param("model") Leave model,
+                          @Param("leaveId") String leaveId);
 }

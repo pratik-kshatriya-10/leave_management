@@ -1,5 +1,7 @@
 package com.pheonix.leavemanagement.utils;
 
+import java.util.List;
+
 public class Constants {
 
     private Constants(){
@@ -29,7 +31,10 @@ public class Constants {
         private LeaveStatuses(){
             // No Use
         }
-        public static final String PENDING = "pending";
+        public static final String PENDING = "Pending";
         public static final String APPROVED = "Approved";
+        public static final String CANCELLED = "Cancelled";
+
+        public static final List<String> leaveStatuses = List.of(PENDING, APPROVED ,CANCELLED);
     }
 }

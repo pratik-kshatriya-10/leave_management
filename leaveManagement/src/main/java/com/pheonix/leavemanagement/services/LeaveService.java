@@ -2,6 +2,7 @@ package com.pheonix.leavemanagement.services;
 
 import com.pheonix.leavemanagement.dtos.LeaveDto;
 import com.pheonix.leavemanagement.dtos.LeaveListDto;
+import com.pheonix.leavemanagement.dtos.LeaveStatusDto;
 import com.pheonix.leavemanagement.dtos.PaginationDto;
 import com.pheonix.leavemanagement.models.Leave;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,6 @@ public interface LeaveService {
     int fetchLeaveCount(PaginationDto paginationDto);
 
     List<LeaveListDto> fetchLeaveList(PaginationDto paginationDto);
+
+    int updateLeaveStatus(LeaveStatusDto dto);
 }

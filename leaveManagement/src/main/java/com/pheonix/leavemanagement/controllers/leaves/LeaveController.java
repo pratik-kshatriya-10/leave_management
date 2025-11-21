@@ -3,6 +3,7 @@ package com.pheonix.leavemanagement.controllers.leaves;
 import com.pheonix.leavemanagement.controllers.BaseRestController;
 import com.pheonix.leavemanagement.dtos.LeaveDto;
 import com.pheonix.leavemanagement.dtos.LeaveListDto;
+import com.pheonix.leavemanagement.dtos.LeaveStatusDto;
 import com.pheonix.leavemanagement.dtos.PaginationDto;
 import com.pheonix.leavemanagement.models.DataGridModel;
 import com.pheonix.leavemanagement.models.Leave;
@@ -94,6 +95,19 @@ public class LeaveController extends BaseRestController {
         model.setData(list);
         model.setPaginationDto(paginationDto);
         return model;
+    }
+
+    @PutMapping(value = "update-status", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> updateLeaveStatus(
+            @RequestBody LeaveStatusDto dto){
+        if (!leaveService.leaveIdExist(dto.getLeaveId())){
+            throw new CustomException(Messages.INVALID_LEAVE_ID);
+        }
+        int result = leaveService.updateLeaveStatus(dto);
+        if (result < 0){
+            throw new CustomException(Messages.ERROR_UPDATE_LEAVE_STATUS);
+        }
+        return constructSuccessResponse(Messages.SUCCESS_UPDATE_LEAVE_STATUS, Constants.SUCCESS);
     }
 
 }

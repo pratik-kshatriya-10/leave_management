@@ -23,7 +23,7 @@ public interface DepartmentService {
 
     Department fetchDepartment(@NotEmpty(message = Messages.REQUIRED_DEPARTMENT_ID) String departmentId);
 
-    int fetchDepartmentCount(PaginationDto paginationDto);
+    int fetchDepartmentCount(@Valid PaginationDto paginationDto);
 
-    List<Department> fetchDepartmentList(PaginationDto paginationDto);
+    List<Department> fetchDepartmentList(@Valid PaginationDto paginationDto);
 }

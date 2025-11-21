@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pheonix.leavemanagement.daos.LeaveHistoryDao">
+    <resultMap id="leaveHistoryMap" type="com.pheonix.leavemanagement.models.LeaveHistory">
+        <id property="leaveHistoryId" column="leave_history_id"/>
+        <result property="leaveId" column="leave_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <insert id="addLeaveHistory" parameterType="com.pheonix.leavemanagement.models.LeaveHistory"
+            keyProperty="leaveHistoryId" keyColumn="leave_history_id">
+        INSERT INTO
+            leave_history
+        (
+            leave_history_id, leave_id, user_id, status,
+            deleted_at, created_at, updated_at, created_by, updated_by
+        )
+        VALUES
+        (
+            #{leaveHistoryId}, #{leaveId}, #{userId}, #{status},
+            #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
+        )
+    </insert>
+</mapper>

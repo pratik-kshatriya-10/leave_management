@@ -142,4 +142,17 @@
         LIMIT #{paginationDto.limit}
         OFFSET #{paginationDto.offset}
     </select>
+
+    <update id="updateLeaveStatus" parameterType="com.pheonix.leavemanagement.models.Leave">
+        UPDATE
+            leaves
+        SET
+            leave_status = #{model.leaveStatus},
+            updated_at= #{model.updatedAt},
+            updated_by = #{model.updatedBy}
+        WHERE
+            leave_id = #{leaveId}
+        AND
+            deleted_at = false
+    </update>
 </mapper>
