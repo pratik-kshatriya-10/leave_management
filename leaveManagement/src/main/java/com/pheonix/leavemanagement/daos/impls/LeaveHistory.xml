@@ -28,4 +28,55 @@
             #{deletedAt}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
         )
     </insert>
+
+    <select id="fetchLeaveHistoryCount" parameterType="com.pheonix.leavemanagement.dtos.LeaveHistoryByUserDto"
+            resultType="int">
+        SELECT
+            count(*)
+        FROM
+            leave_history
+        WHERE
+            deleted_at = false
+        <if test="leaveHistoryByUserDto.searchStr != null and !leaveHistoryByUserDto.searchStr != ''">
+            AND
+            (
+                status LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="fetchLeaveHistoryList" parameterType="com.pheonix.leavemanagement.dtos.LeaveHistoryByUserDto"
+            resultMap="leaveHistoryMap">
+        SELECT
+            *
+        FROM
+            leave_history
+        WHERE
+            deleted_at = false
+        <if test="leaveHistoryByUserDto.searchStr != null and !leaveHistoryByUserDto.searchStr != ''">
+            AND
+            (
+                status LIKE CONCAT('%', #{leaveHistoryByUserDto.searchStr}, '%')
+            )
+        </if>
+        ORDER BY
+        <choose>
+            <when test="leaveHistoryByUserDto.defaultSortColumn != null and leaveHistoryByUserDto.defaultSortColumn.equalsIgnoreCase('userId')">
+                user_id
+            </when>
+            <otherwise>
+                created_at
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="leaveHistoryByUserDto.defaultSortType != null and leaveHistoryByUserDto.defaultSortType.equalsIgnoreCase('desc')">
+                DESC
+            </when>
+            <otherwise>
+                ASC
+            </otherwise>
+        </choose>
+        LIMIT #{leaveHistoryByUserDto.limit}
+        OFFSET #{leaveHistoryByUserDto.offset}
+    </select>
 </mapper>

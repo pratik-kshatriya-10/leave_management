@@ -1,18 +1,23 @@
 package com.pheonix.leavemanagement.services.impls;
 
 import com.pheonix.leavemanagement.daos.LeaveHistoryDao;
+import com.pheonix.leavemanagement.dtos.LeaveHistoryByUserDto;
 import com.pheonix.leavemanagement.models.LeaveHistory;
 import com.pheonix.leavemanagement.services.LeaveHistoryService;
 import com.pheonix.leavemanagement.utils.DateUtils;
 import com.pheonix.leavemanagement.utils.UUID;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LeaveHistoryServiceImpl implements LeaveHistoryService {
     @Autowired
     private LeaveHistoryDao leaveHistoryDao;
-
+    @Override
+    @Transactional(rollbackOn = Exception.class)
     public void addLeaveHistory(String leaveId, String userId, String leaveStatus, String loggedInUserId){
         LeaveHistory model = new LeaveHistory();
         model.setLeaveHistoryId(UUID.random());
@@ -21,5 +26,15 @@ public class LeaveHistoryServiceImpl implements LeaveHistoryService {
         model.setStatus(leaveStatus);
         model.updateCCUU(loggedInUserId, DateUtils.now());
         leaveHistoryDao.addLeaveHistory(model);
+    }
+
+    @Override
+    public int fetchLeaveHistoryCount(LeaveHistoryByUserDto leaveHistoryByUserDto){
+        return leaveHistoryDao.fetchLeaveHistoryCount(leaveHistoryByUserDto);
+    }
+
+    @Override
+    public List<LeaveHistory> fetchLeaveHistoryList(LeaveHistoryByUserDto leaveHistoryByUserDto){
+        return leaveHistoryDao.fetchLeaveHistoryList(leaveHistoryByUserDto);
     }
 }
