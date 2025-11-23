@@ -1,6 +1,7 @@
 package com.pheonix.leavemanagement.daos;
 
-import com.pheonix.leavemanagement.dtos.LeaveListDto;
+import com.pheonix.leavemanagement.dtos.LeaveListReqDto;
+import com.pheonix.leavemanagement.dtos.LeaveListResDto;
 import com.pheonix.leavemanagement.dtos.PaginationDto;
 import com.pheonix.leavemanagement.models.Leave;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,9 +24,9 @@ public interface LeaveDao {
 
     Leave fetchLeave(@Param("leaveId") String leaveId);
 
-    int fetchLeaveCount(@Param("paginationDto") PaginationDto paginationDto);
+    int fetchLeaveCount(@Param("paginationDto") LeaveListReqDto paginationDto);
 
-    List<LeaveListDto> fetchLeaveList(@Param("paginationDto") PaginationDto paginationDto);
+    List<LeaveListResDto> fetchLeaveList(@Param("paginationDto") LeaveListReqDto paginationDto);
 
     int updateLeaveStatus(@Param("model") Leave model,
                           @Param("leaveId") String leaveId);

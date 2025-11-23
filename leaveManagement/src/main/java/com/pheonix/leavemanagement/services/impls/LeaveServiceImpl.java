@@ -1,10 +1,7 @@
 package com.pheonix.leavemanagement.services.impls;
 
 import com.pheonix.leavemanagement.daos.LeaveDao;
-import com.pheonix.leavemanagement.dtos.LeaveDto;
-import com.pheonix.leavemanagement.dtos.LeaveListDto;
-import com.pheonix.leavemanagement.dtos.LeaveStatusDto;
-import com.pheonix.leavemanagement.dtos.PaginationDto;
+import com.pheonix.leavemanagement.dtos.*;
 import com.pheonix.leavemanagement.models.Leave;
 import com.pheonix.leavemanagement.services.LeaveHistoryService;
 import com.pheonix.leavemanagement.services.LeaveService;
@@ -81,13 +78,18 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public int fetchLeaveCount(PaginationDto paginationDto){
-        return leaveDao.fetchLeaveCount(paginationDto);
+    public int fetchLeaveCount(LeaveListReqDto leaveListReqDto){
+        return leaveDao.fetchLeaveCount(leaveListReqDto);
     }
 
     @Override
-    public List<LeaveListDto> fetchLeaveList(PaginationDto paginationDto){
-        return leaveDao.fetchLeaveList(paginationDto);
+    public List<LeaveListResDto> fetchLeaveList(LeaveListReqDto leaveListReqDto){
+        List<LeaveListResDto> list =  leaveDao.fetchLeaveList(leaveListReqDto);
+        for(LeaveListResDto leaveListResDto: list){
+            leaveListResDto.setFromDate(DateUtils.convertDateInString(leaveListResDto.getFromDateInLong()));
+            leaveListResDto.setToDate(DateUtils.convertDateInString(leaveListResDto.getToDateInLong()));
+        }
+        return list;
     }
 
     @Override

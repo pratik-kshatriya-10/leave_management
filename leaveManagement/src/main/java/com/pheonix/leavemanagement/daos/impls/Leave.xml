@@ -20,6 +20,20 @@
         <result property="updatedBy" column="updated_by"/>
     </resultMap>
 
+    <resultMap id="leaveListMap" type="com.pheonix.leavemanagement.dtos.LeaveListResDto">
+        <result property="leaveId" column="leave_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userFullName" column="full_name"/>
+        <result property="reportedToFullName" column="reported_to_full_name"/>
+        <result property="leaveTypeName" column="leave_type_name"/>
+        <result property="fromDateInLong" column="from_date"/>
+        <result property="toDateInLong" column="to_date"/>
+        <result property="numberOfDays" column="number_of_days"/>
+        <result property="leaveReason" column="leave_reason"/>
+        <result property="reportedToId" column="reported_to_id"/>
+        <result property="leaveStatus" column="leave_status"/>
+    </resultMap>
+
     <insert id="addLeave" parameterType="com.pheonix.leavemanagement.models.Leave"
             keyProperty="leaveId" keyColumn="leave_id">
         INSERT INTO
@@ -97,35 +111,86 @@
         SELECT
             count(*)
         FROM
-            leaves
+            leaves l
+            INNER JOIN users u ON l.user_id = u.user_id
+            INNER JOIN users rt ON l.reported_to_id = rt.user_id
         WHERE
-            deleted_at = false
+            l.deleted_at = false
         <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
             AND
             (
-                user_id LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+                leave_status LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                CONCAT(u.first_name, ' ', u.last_name) LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                leave_type_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
             )
+        </if>
+
+        <if test="paginationDto.fromDateInLong != null and paginationDto.fromDateInLong > 0">
+            AND
+            to_date &gt;= #{paginationDto.fromDateInLong}
+        </if>
+
+        <if test="paginationDto.toDateInLong != null and paginationDto.toDateInLong > 0">
+            AND
+            to_date &lt;= #{paginationDto.toDateInLong}
+        </if>
+
+        <if test="paginationDto.leaveStatus != null and paginationDto.leaveStatus != ''">
+            AND leave_status = #{paginationDto.leaveStatus}
+        </if>
+
+        <if test="paginationDto.leaveTypeName != null and paginationDto.leaveTypeName != ''">
+            AND
+            leave_type_name = #{paginationDto.leaveTypeName}
         </if>
     </select>
 
     <select id="fetchLeaveList" parameterType="com.pheonix.leavemanagement.dtos.PaginationDto"
-            resultMap="leaveMap">
+            resultMap="leaveListMap">
         SELECT
-            *
+            l.*, CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+            CONCAT(rt.first_name, ' ', rt.last_name) AS reported_to_full_name
         FROM
-            leaves
+            leaves l
+            INNER JOIN users u ON l.user_id = u.user_id
+            INNER JOIN users rt ON l.reported_to_id = rt.user_id
         WHERE
-        deleted_at = false
+            l.deleted_at = false
         <if test="paginationDto.searchStr != null and !paginationDto.searchStr != ''">
             AND
             (
-            user_id LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+                leave_status LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                CONCAT(u.first_name, ' ', u.last_name) LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+            OR
+                leave_type_name LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
             )
+        </if>
+
+        <if test="paginationDto.fromDateInLong != null and paginationDto.fromDateInLong > 0">
+            AND
+            to_date &gt;= #{paginationDto.fromDateInLong}
+        </if>
+
+        <if test="paginationDto.toDateInLong != null and paginationDto.toDateInLong > 0">
+            AND
+            to_date &lt;= #{paginationDto.toDateInLong}
+        </if>
+
+        <if test="paginationDto.leaveStatus != null and paginationDto.leaveStatus != ''">
+            AND leave_status = #{paginationDto.leaveStatus}
+        </if>
+
+        <if test="paginationDto.leaveTypeName != null and paginationDto.leaveTypeName != ''">
+            AND
+            leave_type_name = #{paginationDto.leaveTypeName}
         </if>
         ORDER BY
         <choose>
-            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('userId')">
-                user_id
+            <when test="paginationDto.defaultSortColumn != null and paginationDto.defaultSortColumn.equalsIgnoreCase('leaveStatus')">
+                leave_status
             </when>
             <otherwise>
                 created_at

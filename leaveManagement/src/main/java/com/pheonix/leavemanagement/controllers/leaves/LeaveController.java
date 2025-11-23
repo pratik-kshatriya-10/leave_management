@@ -1,15 +1,13 @@
 package com.pheonix.leavemanagement.controllers.leaves;
 
 import com.pheonix.leavemanagement.controllers.BaseRestController;
-import com.pheonix.leavemanagement.dtos.LeaveDto;
-import com.pheonix.leavemanagement.dtos.LeaveListDto;
-import com.pheonix.leavemanagement.dtos.LeaveStatusDto;
-import com.pheonix.leavemanagement.dtos.PaginationDto;
+import com.pheonix.leavemanagement.dtos.*;
 import com.pheonix.leavemanagement.models.DataGridModel;
 import com.pheonix.leavemanagement.models.Leave;
 import com.pheonix.leavemanagement.services.LeaveService;
 import com.pheonix.leavemanagement.utils.Constants;
 import com.pheonix.leavemanagement.utils.CustomException;
+import com.pheonix.leavemanagement.utils.DateUtils;
 import com.pheonix.leavemanagement.utils.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -83,17 +81,24 @@ public class LeaveController extends BaseRestController {
     }
 
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DataGridModel<LeaveListDto> searchLeaves(
-            @RequestBody PaginationDto paginationDto){
-        int count = leaveService.fetchLeaveCount(paginationDto);
-        List<LeaveListDto> list = new ArrayList<>();
-        if (count > 0){
-            list = leaveService.fetchLeaveList(paginationDto);
+    public DataGridModel<LeaveListResDto> searchLeaves(
+            @RequestBody LeaveListReqDto leaveListReqDto){
+        if(leaveListReqDto.getFromDate() != null){
+            leaveListReqDto.setFromDateInLong(DateUtils.convertDateIntoLongStartOfDay(leaveListReqDto.getFromDate()));
         }
-        DataGridModel<LeaveListDto> model = new DataGridModel<>();
+        if (leaveListReqDto.getToDate() != null){
+            leaveListReqDto.setToDateInLong(DateUtils.convertDateIntoLongEndOfDay(leaveListReqDto.getToDate()));
+        }
+
+        int count = leaveService.fetchLeaveCount(leaveListReqDto);
+        List<LeaveListResDto> list = new ArrayList<>();
+        if (count > 0){
+            list = leaveService.fetchLeaveList(leaveListReqDto);
+        }
+        DataGridModel<LeaveListResDto> model = new DataGridModel<>();
         model.setCount(count);
         model.setData(list);
-        model.setPaginationDto(paginationDto);
+        model.setPaginationDto(leaveListReqDto);
         return model;
     }
 

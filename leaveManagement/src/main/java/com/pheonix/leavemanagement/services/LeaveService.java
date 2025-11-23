@@ -1,9 +1,6 @@
 package com.pheonix.leavemanagement.services;
 
-import com.pheonix.leavemanagement.dtos.LeaveDto;
-import com.pheonix.leavemanagement.dtos.LeaveListDto;
-import com.pheonix.leavemanagement.dtos.LeaveStatusDto;
-import com.pheonix.leavemanagement.dtos.PaginationDto;
+import com.pheonix.leavemanagement.dtos.*;
 import com.pheonix.leavemanagement.models.Leave;
 import com.pheonix.leavemanagement.utils.Messages;
 import jakarta.validation.Valid;
@@ -26,9 +23,9 @@ public interface LeaveService {
 
     Leave fetchLeave(@NotEmpty(message = Messages.LEAVE_ID_REQUIRED) String leaveId);
 
-    int fetchLeaveCount(@Valid PaginationDto paginationDto);
+    int fetchLeaveCount(@Valid LeaveListReqDto leaveListReqDto);
 
-    List<LeaveListDto> fetchLeaveList(@Valid PaginationDto paginationDto);
+    List<LeaveListResDto> fetchLeaveList(@Valid LeaveListReqDto leaveListReqDto);
 
     int updateLeaveStatus(@Valid LeaveStatusDto dto);
 }
