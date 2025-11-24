@@ -4,6 +4,7 @@ import com.pheonix.leavemanagement.utils.Messages;
 import jakarta.validation.constraints.NotEmpty;
 
 public class LeaveHistoryByUserDto extends PaginationDto{
+
     @NotEmpty(message = Messages.USER_ID_REQUIRED)
     private String userId;
 

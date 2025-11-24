@@ -1,9 +1,14 @@
 package com.pheonix.leavemanagement.dtos;
 
 import com.pheonix.leavemanagement.models.Leave;
-import com.pheonix.leavemanagement.utils.Constants;
 
-public class LeaveDto {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class LeaveDto implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -2630676812180474279L;
+
     private String userId;
 
     private String leaveTypeName;

@@ -16,6 +16,7 @@ import java.util.List;
 public class LeaveHistoryServiceImpl implements LeaveHistoryService {
     @Autowired
     private LeaveHistoryDao leaveHistoryDao;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void addLeaveHistory(String leaveId, String userId, String leaveStatus, String loggedInUserId){

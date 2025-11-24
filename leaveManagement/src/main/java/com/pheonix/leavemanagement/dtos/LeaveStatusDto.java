@@ -3,7 +3,13 @@ package com.pheonix.leavemanagement.dtos;
 import com.pheonix.leavemanagement.utils.Messages;
 import jakarta.validation.constraints.NotEmpty;
 
-public class LeaveStatusDto {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class LeaveStatusDto implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 4596697589435652879L;
+
     @NotEmpty(message = Messages.LEAVE_ID_REQUIRED)
     private String leaveId;
 
