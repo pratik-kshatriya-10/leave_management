@@ -1,7 +1,7 @@
 package com.pheonix.leavemanagement.services;
 
 import com.pheonix.leavemanagement.dtos.LeaveHistoryByUserDto;
-import com.pheonix.leavemanagement.models.LeaveHistory;
+import com.pheonix.leavemanagement.dtos.LeaveHistoryListDto;
 import com.pheonix.leavemanagement.utils.Messages;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,5 +21,5 @@ public interface LeaveHistoryService {
 
     int fetchLeaveHistoryCount(@Valid LeaveHistoryByUserDto leaveHistoryByUserDto);
 
-    List<LeaveHistory> fetchLeaveHistoryList(@Valid LeaveHistoryByUserDto leaveHistoryByUserDto);
+    List<LeaveHistoryListDto> fetchLeaveHistoryList(@Valid LeaveHistoryByUserDto leaveHistoryByUserDto);
 }

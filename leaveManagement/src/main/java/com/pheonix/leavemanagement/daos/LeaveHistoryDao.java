@@ -1,6 +1,7 @@
 package com.pheonix.leavemanagement.daos;
 
 import com.pheonix.leavemanagement.dtos.LeaveHistoryByUserDto;
+import com.pheonix.leavemanagement.dtos.LeaveHistoryListDto;
 import com.pheonix.leavemanagement.models.LeaveHistory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,5 +15,5 @@ public interface LeaveHistoryDao {
 
     int fetchLeaveHistoryCount(@Param("leaveHistoryByUserDto") LeaveHistoryByUserDto leaveHistoryByUserDto);
 
-    List<LeaveHistory> fetchLeaveHistoryList(@Param("leaveHistoryByUserDto") LeaveHistoryByUserDto leaveHistoryByUserDto);
+    List<LeaveHistoryListDto> fetchLeaveHistoryList(@Param("leaveHistoryByUserDto") LeaveHistoryByUserDto leaveHistoryByUserDto);
 }

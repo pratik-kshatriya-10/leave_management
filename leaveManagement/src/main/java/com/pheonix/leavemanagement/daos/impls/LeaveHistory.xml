@@ -2,11 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pheonix.leavemanagement.daos.LeaveHistoryDao">
-    <resultMap id="leaveHistoryMap" type="com.pheonix.leavemanagement.models.LeaveHistory">
-        <id property="leaveHistoryId" column="leave_history_id"/>
+    <resultMap id="leaveHistoryListMap" type="com.pheonix.leavemanagement.dtos.LeaveHistoryListDto">
+        <result property="leaveHistoryId" column="leave_history_id"/>
         <result property="leaveId" column="leave_id"/>
         <result property="userId" column="user_id"/>
         <result property="status" column="status"/>
+        <result property="userFullName" column="full_name"/>
+        <result property="fromDateInLong" column="from_date"/>
+        <result property="toDateInLong" column="to_date"/>
+        <result property="leaveTypeName" column="leave_type_name"/>
         <result property="deletedAt" column="deleted_at"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
@@ -34,35 +38,77 @@
         SELECT
             count(*)
         FROM
-            leave_history
+            leave_history lh
+            LEFT JOIN leaves l ON lh.leave_id = l.leave_id
+            INNER JOIN users u ON l.user_id = u.user_id
         WHERE
-            deleted_at = false
+            lh.deleted_at = false
+        AND
+            lh.user_id = #{leaveHistoryByUserDto.userId}
         <if test="leaveHistoryByUserDto.searchStr != null and !leaveHistoryByUserDto.searchStr != ''">
             AND
             (
-                status LIKE CONCAT('%', #{paginationDto.searchStr}, '%')
+                lh.status LIKE CONCAT('%', #{leaveHistoryByUserDto.searchStr}, '%')
+            OR
+                CONCAT(u.first_name, ' ', u.last_name) LIKE CONCAT('%', #{leaveHistoryByUserDto.searchStr}, '%')
             )
+        </if>
+
+        <if test="leaveHistoryByUserDto.fromDateInLong != null and leaveHistoryByUserDto.fromDateInLong > 0">
+            AND
+            to_date &gt;= #{leaveHistoryByUserDto.fromDateInLong}
+        </if>
+
+        <if test="leaveHistoryByUserDto.toDateInLong != null and leaveHistoryByUserDto.toDateInLong > 0">
+            AND
+            to_date &lt;= #{leaveHistoryByUserDto.toDateInLong}
+        </if>
+
+        <if test="leaveHistoryByUserDto.leaveStatus != null and leaveHistoryByUserDto.leaveStatus != ''">
+            AND
+            lh.status = #{leaveHistoryByUserDto.leaveStatus}
         </if>
     </select>
 
     <select id="fetchLeaveHistoryList" parameterType="com.pheonix.leavemanagement.dtos.LeaveHistoryByUserDto"
-            resultMap="leaveHistoryMap">
+            resultMap="leaveHistoryListMap">
         SELECT
-            *
+            lh.*, CONCAT(u.first_name, ' ', u.last_name) AS full_name, l.from_date, l.to_date, l.leave_type_name
         FROM
-            leave_history
+            leave_history lh
+            INNER JOIN leaves l ON lh.leave_id = l.leave_id
+            INNER JOIN users u ON l.user_id = u.user_id
         WHERE
-            deleted_at = false
+            lh.deleted_at = false
+        AND
+            lh.user_id = #{leaveHistoryByUserDto.userId}
         <if test="leaveHistoryByUserDto.searchStr != null and !leaveHistoryByUserDto.searchStr != ''">
             AND
             (
-                status LIKE CONCAT('%', #{leaveHistoryByUserDto.searchStr}, '%')
+                lh.status LIKE CONCAT('%', #{leaveHistoryByUserDto.searchStr}, '%')
+            OR
+                CONCAT(u.first_name, ' ', u.last_name) LIKE CONCAT('%', #{leaveHistoryByUserDto.searchStr}, '%')
             )
+        </if>
+
+        <if test="leaveHistoryByUserDto.fromDateInLong != null and leaveHistoryByUserDto.fromDateInLong > 0">
+            AND
+            l.to_date &gt;= #{leaveHistoryByUserDto.fromDateInLong}
+        </if>
+
+        <if test="leaveHistoryByUserDto.toDateInLong != null and leaveHistoryByUserDto.toDateInLong > 0">
+            AND
+            l.to_date &lt;= #{leaveHistoryByUserDto.toDateInLong}
+        </if>
+
+        <if test="leaveHistoryByUserDto.leaveStatus != null and leaveHistoryByUserDto.leaveStatus != ''">
+            AND
+            lh.status = #{leaveHistoryByUserDto.leaveStatus}
         </if>
         ORDER BY
         <choose>
-            <when test="leaveHistoryByUserDto.defaultSortColumn != null and leaveHistoryByUserDto.defaultSortColumn.equalsIgnoreCase('userId')">
-                user_id
+            <when test="leaveHistoryByUserDto.defaultSortColumn != null and leaveHistoryByUserDto.defaultSortColumn.equalsIgnoreCase('status')">
+                lh.status
             </when>
             <otherwise>
                 created_at

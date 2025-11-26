@@ -1,31 +1,26 @@
 package com.pheonix.leavemanagement.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pheonix.leavemanagement.utils.Messages;
-import jakarta.validation.constraints.NotEmpty;
+import com.pheonix.leavemanagement.models.LeaveHistory;
 
-public class LeaveHistoryByUserDto extends PaginationDto{
+import java.io.Serial;
 
-    @NotEmpty(message = Messages.USER_ID_REQUIRED)
-    private String userId;
+public class LeaveHistoryListDto extends LeaveHistory {
+    @Serial
+    private static final long serialVersionUID = 8586591298962894843L;
 
+    private String userFullName;
     private String startDate;
-
     private String endDate;
-
-    private String leaveStatus;
-
-    @JsonIgnore
+    private String leaveTypeName;
     private long fromDateInLong;
-    @JsonIgnore
     private long toDateInLong;
 
-    public String getUserId() {
-        return userId;
+    public String getUserFullName() {
+        return userFullName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 
     public String getStartDate() {
@@ -44,12 +39,12 @@ public class LeaveHistoryByUserDto extends PaginationDto{
         this.endDate = endDate;
     }
 
-    public String getLeaveStatus() {
-        return leaveStatus;
+    public String getLeaveTypeName() {
+        return leaveTypeName;
     }
 
-    public void setLeaveStatus(String leaveStatus) {
-        this.leaveStatus = leaveStatus;
+    public void setLeaveTypeName(String leaveTypeName) {
+        this.leaveTypeName = leaveTypeName;
     }
 
     public long getFromDateInLong() {
